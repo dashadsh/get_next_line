@@ -19,7 +19,7 @@ int main()
 	//create a buffer and give it a size of 100
 	char *b = (char *) calloc(1, sizeof(char));
 	//char b[100];
-	read(fd, b, 12);
+	read(fd, b, 500);
 	printf("%s\n", b);
 	close(fd);
 	return 0;
