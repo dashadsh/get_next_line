@@ -1,30 +1,35 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   get_next_line.c                                    :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: dgoremyk <dgoremyk@student.42wolfsburg.    +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/06/07 01:44:29 by dgoremyk          #+#    #+#             */
-/*   Updated: 2022/06/20 16:40:35 by dgoremyk         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
+#include <stdio.h>
+#include <unistd.h>
+#include <fcntl.h>
+#include <stdlib.h>
 
-/* man 2 read, find
+#include "get_next_line.h"
 
-lseek() is forbidden
-
-read(), malloc, free()
-static variables
-open() - how to open files, access to their content
-*/
-
-/*
-adding lines w strjoin
-*/
-int	ft_check_eol
-int	ft_check_eof
-char *get_next_line(int fd)
+char *get_smth(int fd)
 {
+	//create a buffer and give it a size of 500
+	char *buffer = (char *)malloc(BUFFER_SIZE);
+	//char buffer[500];
+	if (!buffer)
+		return (NULL);
 	
+	int amount = read(fd, buffer, 9);
+	printf("amount to read 1st time: %d\n", amount);
+	printf("%s\n", buffer); //d?
+
+	amount = read(fd, buffer, 20);
+	printf("amount to read 2nd time: %d\n", amount);
+	printf("%s\n", buffer); //d?
+
+	return (buffer); // NOT RETURN NULL!!!
+}
+
+int main()
+{
+	int fd = open("text.txt", O_RDONLY);
+	char *result = get_smth(fd);
+	printf("main: %s\n", result);
+
+	close(fd);
+	return 0;
 }
