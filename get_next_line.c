@@ -1,28 +1,32 @@
-#include "get_next_line.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: dgoremyk <dgoremyk@student.42wolfsburg.    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/06/07 01:44:29 by dgoremyk          #+#    #+#             */
+/*   Updated: 2022/06/28 12:47:31 by dgoremyk         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
-char *get_smth(int fd)
+/* man 2 read, find
+
+lseek() is forbidden
+
+read(), malloc, free()
+static variables
+open() - how to open files, access to their content
+
+fd 10240
+
+adding lines w strjoin
+
+int	ft_check_eol
+int	ft_check_eof
+*/
+
+char	*get_next_line(int fd)
 {
-	char *buffer = (char *)malloc(BUFFER_SIZE);
-	if (!buffer)
-		return (NULL);
 	
-	int amount = read(fd, buffer, 9);
-	printf("amount to read 1st time: %d\n", amount);
-	printf("%s\n", buffer); //d?
-
-	amount = read(fd, buffer, 20);
-	printf("amount to read 2nd time: %d\n", amount);
-	printf("%s\n", buffer); //d?
-
-	return (buffer); // NOT RETURN NULL!!!
-}
-
-int main()
-{
-	int fd = open("text.txt", O_RDONLY);
-	char *result = get_smth(fd);
-	printf("main: %s\n", result);
-
-	close(fd);
-	return 0;
 }
