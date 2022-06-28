@@ -7,9 +7,7 @@
 
 char *get_smth(int fd)
 {
-	//create a buffer and give it a size of 500
 	char *buffer = (char *)malloc(BUFFER_SIZE);
-	//char buffer[500];
 	if (!buffer)
 		return (NULL);
 	
