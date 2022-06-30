@@ -1,3 +1,5 @@
+/* CALL BY REFERENCE */
+
 #include "get_next_line.h"
 
 //WOULDNT WORK BECAUSE

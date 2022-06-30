@@ -15,7 +15,7 @@ char *get_smth(int fd)
 	printf("amount to read 2nd time: %d\n", amount);
 	printf("%s\n", buffer); //d?
 
-	return (buffer); // NOT RETURN NULL!!!
+	return (buffer); // NOT RETURN NULL!!! ????????
 }
 
 int main(void)
