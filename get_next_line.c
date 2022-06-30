@@ -6,7 +6,7 @@
 /*   By: dgoremyk <dgoremyk@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/07 01:44:29 by dgoremyk          #+#    #+#             */
-/*   Updated: 2022/06/30 15:11:56 by dgoremyk         ###   ########.fr       */
+/*   Updated: 2022/06/30 15:21:48 by dgoremyk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,12 +32,15 @@ char	*get_next_line(int fd, char **line)
 {
 	int	byte_was_read;
 	char buffer[BUFFER_SIZE + 1];
-	*line = ft_strnew(1);
 	char *ptr_n;
 	int flag = 1;
+	static char	*leftover;
+
+	*line = ft_strnew(1);
 	//while ((byte_was_read = read(fd, buffer, 10)))
 	while (flag && (byte_was_read = read(fd, buffer, 10)))  //SIC!!! save and check for 0 double parentheses
 	{
+		buffer[byte_was_read] = '\0'; // NEEDED?
 		if ((ptr_n = ft_strchr(buffer, '\n')))
 		{
 			*ptr_n = '\0';
@@ -57,6 +60,14 @@ int	main(void)
 	fd = open("text.txt", O_RDONLY);
 	//printf("fd: %d\n", fd);
 	//printf("fd: %d\n", 3);
+	get_next_line(fd, &line);
+	printf("%s\n", line);
+	get_next_line(fd, &line);
+	printf("%s\n", line);
+	get_next_line(fd, &line);
+	printf("%s\n", line);
+	get_next_line(fd, &line);
+	printf("%s\n", line);
 	get_next_line(fd, &line);
 	printf("%s\n", line);
 	get_next_line(fd, &line);
