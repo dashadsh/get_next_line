@@ -2,28 +2,34 @@
 
 char *get_smth(int fd)
 {
-	//char	 buffer[BUFFER_SIZE]; - doesnt work
-	char *buffer = (char *)malloc(BUFFER_SIZE);
+	char *buffer;
+	int result;
+
+	buffer = (char *)malloc(BUFFER_SIZE + 1);
 	if (!buffer)
 		return (NULL);
-	
-	int amount = read(fd, buffer, 9);
-	printf("amount to read 1st time: %d\n", amount);
-	printf("%s\n", buffer); //d?
-
-	amount = read(fd, buffer, 20);
-	printf("amount to read 2nd time: %d\n", amount);
-	printf("%s\n", buffer); //d?
-
-	return (buffer); // NOT RETURN NULL!!! ????????
+	result = read(fd, buffer, BUFFER_SIZE);
+	if (result == -1)
+		printf("result error: %d\n", result);
+	if (result == 0)
+		printf("EOF. ret: %d\n", result);
+	if (result > 0)
+		printf("amt. of bytes read: %d\n", result);
+	printf("read: %s\n", buffer);
+	return (0); // ???????? or buffer?
 }
 
 int main(void)
 {
-	int fd = open("text.txt", O_RDONLY);
-	char *result = get_smth(fd);
-	printf("main: %s\n", result);
+	int fd;
+	char *result;
 
+	fd = open("text.txt", O_RDONLY);
+    if (fd == -1)
+		printf("file opening error: %d \n", fd);
+	if (fd >= 0)
+		printf("fd opened: %d\n", fd); 
+	result = get_smth(fd);
 	close(fd);
-	return 0;
+	return (0);
 }
