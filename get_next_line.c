@@ -163,9 +163,9 @@ char *get_next_line(int fd)
 	if (BUFFER_SIZE <= 0 || fd < 0)
 		return (0);
 	hold = malloc(1); //WHYYYYYYYYYYYYYYYYYY
-	hold = reader(fd, hold);
 	// if (!hold)
 	// 		return (0);
+	hold = reader(fd, hold);
 	line = cleaner(hold);
 	hold = garbage_collector(hold);
 	return(line);
