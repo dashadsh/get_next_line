@@ -36,6 +36,6 @@ int main()
 	char *hold = "sdfjhg\nsfldkjh";
 	// char *newstr = garbage_collector(str);
 	char *newstr=  cleaner(hold);
-	printf("%s\n", newstr);
+	printf("%s", newstr);
 	return (0);
 }

@@ -29,29 +29,30 @@ size_t	ft_strlen(const char *s)
 
 char	*ft_strjoin(char *s1, char *s2)
 {
-	char	*newstr;
-	size_t	i;
-	size_t	j;
+	char	*newstring;
+	int		i;
+	int		j;
 
 	i = 0;
 	j = 0;
-	if (!s1 || !s2)
+	newstring = malloc(ft_strlen(s1) + ft_strlen(s2) + 1);
+	if (newstring == 0)
 		return (NULL);
-	newstr = malloc(ft_strlen(s1) + ft_strlen(s2) + 1);
-	if (!newstr)
-		return (NULL);
-	while (s1[i])
+	if (s1)
 	{
-		newstr[i] = s1[i];
-		i++;
+		while (s1[i])
+		{	
+			newstring[i] = s1[i];
+			i++;
+		}
+		free(s1);
 	}
 	while (s2[j])
-		newstr[i++] = s2[j++];
-	//free(s2); //why doesnt work
-	newstr[i] = '\0';
-	// free(s1);
-	return (newstr);
+		newstring[i++] = s2[j++];
+	newstring[i] = '\0';
+	return (newstring);
 }
+
 
 // char	*ft_strcpy(char *dest, char *src)
 // {
@@ -161,8 +162,7 @@ char *get_next_line(int fd)
 
 	if (BUFFER_SIZE <= 0 || fd < 0)
 		return (0);
-
-	hold = (char *)malloc(1);
+	hold = malloc(1); //WHYYYYYYYYYYYYYYYYYY
 	hold = reader(fd, hold);
 	// if (!hold)
 	// 		return (0);
@@ -179,7 +179,10 @@ int	main(void)
 	fd = open("text2.txt", O_RDONLY);
 	line = get_next_line(fd);
 	printf("%s", line);
-
+	line = get_next_line(fd);
+	printf("%s", line);
+	line = get_next_line(fd);
+	printf("%s", line);
 	close(fd);
 	return (0);
 }

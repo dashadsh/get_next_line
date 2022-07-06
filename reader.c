@@ -29,29 +29,30 @@ size_t	ft_strlen(const char *s)
 
 char	*ft_strjoin(char *s1, char *s2)
 {
-	char	*newstr;
-	size_t	i;
-	size_t	j;
+	char	*newstring;
+	int		i;
+	int		j;
 
 	i = 0;
 	j = 0;
-	if (!s1 || !s2)
+	newstring = malloc(ft_strlen(s1) + ft_strlen(s2) + 1);
+	if (newstring == 0)
 		return (NULL);
-	newstr = malloc(ft_strlen(s1) + ft_strlen(s2) + 1);
-	if (!newstr)
-		return (NULL);
-	while (s1[i])
+	if (s1)
 	{
-		newstr[i] = s1[i];
-		i++;
+		while (s1[i])
+		{	
+			newstring[i] = s1[i];
+			i++;
+		}
+		free(s1);
 	}
 	while (s2[j])
-		newstr[i++] = s2[j++];
-	//free(s2); //why doesnt work
-	newstr[i] = '\0';
-	// free(s1);
-	return (newstr);
+		newstring[i++] = s2[j++];
+	newstring[i] = '\0';
+	return (newstring);
 }
+
 
 char	*reader(int fd, char *hold)
 {
@@ -65,11 +66,11 @@ char	*reader(int fd, char *hold)
 	while (bytes_read != 0 && (!ft_strchr(hold, '\n')))
 	{
 		bytes_read = read(fd, buffer, BUFFER_SIZE);
-		// if (rd == -1)
-		// {
-		// 	free(tmp);
-		// 	return (0);
-		// }
+		if (bytes_read == -1)
+		{
+			free(buffer);
+			return (0);
+		}
 	buffer[bytes_read] = '\0';
 	hold = ft_strjoin(hold, buffer);
 	}
@@ -87,7 +88,7 @@ int	main(void)
 	fd = open("text2.txt", O_RDONLY);
 	line = reader(fd, line);
 	printf("%s\n", line);
-
+	line = reader(fd, line);
 	close(fd);
 	return (0);
 }
