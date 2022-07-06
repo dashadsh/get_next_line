@@ -1,35 +1,40 @@
 #include "get_next_line.h"
 
-char *get_smth(int fd)
+char	*get_smth(int fd)
 {
-	char *buffer;
-	int result;
+	int	bytes_read;
+	char	*buffer;
 
 	buffer = (char *)malloc(BUFFER_SIZE + 1);
 	if (!buffer)
 		return (NULL);
-	result = read(fd, buffer, BUFFER_SIZE);
-	if (result == -1)
-		printf("result error: %d\n", result);
-	if (result == 0)
-		printf("EOF. ret: %d\n", result);
-	if (result > 0)
-		printf("amt. of bytes read: %d\n", result);
+	bytes_read = read(fd, buffer, BUFFER_SIZE);
+	if (bytes_read == -1)
+		printf("error: %d\n", bytes_read);
+	if (bytes_read == 0)
+		printf("EOF: %d\n", bytes_read);
+	if (bytes_read > 0)
+		printf("bytes read: %d\n", bytes_read);
 	printf("read: %s\n", buffer);
-	return (0); // ???????? or buffer?
+	return (0);
 }
 
 int main(void)
 {
 	int fd;
-	char *result;
+	char *something;
 
-	fd = open("text.txt", O_RDONLY);
-    if (fd == -1)
+	fd = open("text2.txt", O_RDONLY);
+	if (fd == -1)
 		printf("file opening error: %d \n", fd);
 	if (fd >= 0)
-		printf("fd opened: %d\n", fd); 
-	result = get_smth(fd);
+		printf("fd opened: %d\n", fd);
+	printf("\n");
+	something = get_smth(fd);
+	printf("\n");
+	something = get_smth(fd);
+	printf("\n");
+	something = get_smth(fd);
 	close(fd);
 	return (0);
 }

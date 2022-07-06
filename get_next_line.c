@@ -1,55 +1,174 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   get_next_line.c                                    :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: dgoremyk <dgoremyk@student.42wolfsburg.    +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/06/07 01:44:29 by dgoremyk          #+#    #+#             */
-/*   Updated: 2022/06/30 15:21:48 by dgoremyk         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "get_next_line.h"
-/* man 2 read, find
 
-lseek() is forbidden
+#include <stdio.h> //printf
+#include <unistd.h> //close read write
+#include <fcntl.h> //open
+#include <stdlib.h> //malloc
 
-read(), malloc, free()
-static variables
-open() - how to open files, access to their content
-
-fd 10240
-
-adding lines w strjoin
-
-int	ft_check_eol
-int	ft_check_eof
-*/
-
-
-char	*get_next_line(int fd, char **line) 
+char	*ft_strchr(char *s, int c)
 {
-	int	byte_was_read;
-	char buffer[BUFFER_SIZE + 1];
-	char *ptr_n;
-	int flag = 1;
-	static char	*leftover;
+	int		i;
 
-	*line = ft_strnew(1);
-	//while ((byte_was_read = read(fd, buffer, 10)))
-	while (flag && (byte_was_read = read(fd, buffer, 10)))  //SIC!!! save and check for 0 double parentheses
+	i = 0;
+	while (s[i] && s[i] != (char)c)
+		i++;
+	if (s[i] == (char)c)
+		return ((char *)&s[i]);
+	return (NULL);
+}
+
+size_t	ft_strlen(const char *s)
+{
+	size_t	i;
+
+	i = 0;
+	while (s[i])
+		i++;
+	return (i);
+}
+
+char	*ft_strjoin(char *s1, char *s2)
+{
+	char	*newstr;
+	size_t	i;
+	size_t	j;
+
+	i = 0;
+	j = 0;
+	if (!s1 || !s2)
+		return (NULL);
+	newstr = malloc(ft_strlen(s1) + ft_strlen(s2) + 1);
+	if (!newstr)
+		return (NULL);
+	while (s1[i])
 	{
-		buffer[byte_was_read] = '\0'; // NEEDED?
-		if ((ptr_n = ft_strchr(buffer, '\n')))
-		{
-			*ptr_n = '\0';
-			flag = 0;
-		}
-		buffer[byte_was_read] = '\0';
-		*line = ft_strjoin(*line, buffer);
-	} 
-	return (0);
+		newstr[i] = s1[i];
+		i++;
+	}
+	while (s2[j])
+		newstr[i++] = s2[j++];
+	//free(s2); //why doesnt work
+	newstr[i] = '\0';
+	// free(s1);
+	return (newstr);
+}
+
+// char	*ft_strcpy(char *dest, char *src)
+// {
+// 	int i;
+
+// 	i = 0;
+// 	while (*(src + i))
+// 	{
+// 		*(dest + i) = *(src + i);
+// 		i++;
+// 	}
+// 	dest[i] = '\0';
+// 	return (dest);
+// }
+
+///////////////////////////////////////////////////////////////////////////
+char	*reader(int fd, char *hold)
+{
+	int		bytes_read;
+	char	*buffer;
+
+	buffer = (char *)malloc(sizeof(char) * (BUFFER_SIZE + 1));
+	if (!buffer)
+		return (0);
+	bytes_read = 1;
+	while (bytes_read != 0 && (!ft_strchr(hold, '\n')))
+	{
+		bytes_read = read(fd, buffer, BUFFER_SIZE);
+		// if (rd == -1)
+		// {
+		// 	free(tmp);
+		// 	return (0);
+		// }
+	buffer[bytes_read] = '\0';
+	hold = ft_strjoin(hold, buffer);
+	}
+	free(buffer);
+	return (hold);
+}
+
+char *cleaner(char *hold)
+{
+	char	*line;
+	int	i;
+
+	i = 0;
+	while (hold[i] && hold[i] != '\n')
+		i++;
+	line = (char *)malloc(sizeof(char) * (i + 2));
+	if (!line)
+		return (0); //free?
+	i = 0;
+	while (hold[i] && hold[i] != '\n')
+	{
+		line[i] = hold[i];
+		i++;
+	}
+	if (hold[i] == '\n')
+	{
+		line[i] = hold[i];
+		i++;
+	}
+	line[i] = '\0';
+	return (line);
+}
+
+char	*garbage_collector(char *hold)
+{
+	char	*garbage;
+	int		i;
+	int		j;
+
+	i = 0;
+	while (hold[i] && hold[i] != '\n')
+		i++;
+	// if (!hold)
+	// {
+	// 	free (hold);
+	// 	return (0);
+	// }
+	garbage = (char *)malloc(sizeof(char) * (ft_strlen(hold) - i + 1));
+	if (!garbage)
+		return (0);
+	i++;
+	j = 0;
+	while (hold[i])
+		garbage[j++] = hold[i++];
+	garbage[j] = '\0';
+	// free(hold);
+	return (garbage);
+}
+
+// char *garbage_collector(char *hold)
+// {
+// 	char	*garbage;
+// 	char	*ptr_n;
+
+// 	ptr_n = ft_strchr(hold, '\n');
+// 	ft_strcpy(garbage, ++ptr_n);
+// 	return (garbage);
+// }
+
+char *get_next_line(int fd)
+{
+	static char	*hold;
+	char	*line;
+
+	if (BUFFER_SIZE <= 0 || fd < 0)
+		return (0);
+
+	hold = (char *)malloc(1);
+	hold = reader(fd, hold);
+	// if (!hold)
+	// 		return (0);
+	line = cleaner(hold);
+	hold = garbage_collector(hold);
+	return(line);
 }
 
 int	main(void)
@@ -57,23 +176,10 @@ int	main(void)
 	int		fd;
 	char	*line;
 
-	fd = open("text.txt", O_RDONLY);
-	//printf("fd: %d\n", fd);
-	//printf("fd: %d\n", 3);
-	get_next_line(fd, &line);
-	printf("%s\n", line);
-	get_next_line(fd, &line);
-	printf("%s\n", line);
-	get_next_line(fd, &line);
-	printf("%s\n", line);
-	get_next_line(fd, &line);
-	printf("%s\n", line);
-	get_next_line(fd, &line);
-	printf("%s\n", line);
-	get_next_line(fd, &line);
-	printf("%s\n", line);
-	get_next_line(fd, &line);
-	printf("%s\n", line);
-	close (fd);
+	fd = open("text2.txt", O_RDONLY);
+	line = get_next_line(fd);
+	printf("%s", line);
+
+	close(fd);
 	return (0);
 }
