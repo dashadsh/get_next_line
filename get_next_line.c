@@ -6,7 +6,7 @@
 /*   By: dgoremyk <dgoremyk@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/06 22:02:23 by dgoremyk          #+#    #+#             */
-/*   Updated: 2022/07/07 16:39:54 by dgoremyk         ###   ########.fr       */
+/*   Updated: 2022/07/07 16:55:12 by dgoremyk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,11 +39,10 @@ char	*reader(int fd, char *hold)
 			return (0);
 		}
 		buffer[bytes_read] = '\0';
-		hold = ft_strjoin(hold, buffer);
-		// if (hold)
-		// 	hold = join_feature(hold, buffer);
-		// else
-		// 	hold = ft_strjoin("", buffer);
+		if (hold)
+			hold = ft_strjoin(hold, buffer);
+		else
+			hold = ft_strjoin("", buffer);
 	}
 	free(buffer);
 	return (hold);
