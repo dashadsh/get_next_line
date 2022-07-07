@@ -6,7 +6,7 @@
 /*   By: dgoremyk <dgoremyk@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/06 22:02:05 by dgoremyk          #+#    #+#             */
-/*   Updated: 2022/07/07 16:53:05 by dgoremyk         ###   ########.fr       */
+/*   Updated: 2022/07/07 16:56:12 by dgoremyk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,8 @@ char	*ft_strjoin(char *s1, char *s2)
 
 	i = 0;
 	j = 0;
+	if (!s1 || !s2)
+		return (NULL);
 	newstring = malloc(ft_strlen(s1) + ft_strlen(s2) + 1);
 	if (!newstring)
 		return (NULL);
