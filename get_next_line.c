@@ -6,11 +6,20 @@
 /*   By: dgoremyk <dgoremyk@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/06 22:02:23 by dgoremyk          #+#    #+#             */
-/*   Updated: 2022/07/07 12:10:09 by dgoremyk         ###   ########.fr       */
+/*   Updated: 2022/07/07 16:39:54 by dgoremyk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
+
+// char join_feature(char *hold, char *buffer)
+// {
+// 	char	*newhold;
+
+// 	newhold = ft_strjoin(hold, buffer);
+// 	free (hold);
+// 	return (newhold);
+// }
 
 char	*reader(int fd, char *hold)
 {
@@ -29,8 +38,12 @@ char	*reader(int fd, char *hold)
 			free(buffer);
 			return (0);
 		}
-	buffer[bytes_read] = '\0';
-	hold = ft_strjoin(hold, buffer);
+		buffer[bytes_read] = '\0';
+		hold = ft_strjoin(hold, buffer);
+		// if (hold)
+		// 	hold = join_feature(hold, buffer);
+		// else
+		// 	hold = ft_strjoin("", buffer);
 	}
 	free(buffer);
 	return (hold);
@@ -97,8 +110,6 @@ char	*get_next_line(int fd)
 
 	if (BUFFER_SIZE <= 0 || fd < 0)
 		return (0);
-	hold = malloc(1);
-	hold[0] = '\0';
 	hold = reader(fd, hold);
 	if (!hold)
 		return(0);
@@ -107,35 +118,19 @@ char	*get_next_line(int fd)
 	return(line);
 }
 
-
 int	main(void)
 {
+	int counter = 0;
 	int		fd;
 	char	*file;
-
+	
 	fd = open("text.txt", O_RDONLY);
-	file = get_next_line(fd);
-	printf("%s", file);
-	file = get_next_line(fd);
-	printf("%s", file);
-	file = get_next_line(fd);
-	printf("%s", file);
-	file = get_next_line(fd);
-	printf("%s", file);
-	file = get_next_line(fd);
-	printf("%s", file);
-	file = get_next_line(fd);
-	printf("%s", file);
-	file = get_next_line(fd);
-	printf("%s", file);
-	file = get_next_line(fd);
-	printf("%s", file);
-	file = get_next_line(fd);
-	printf("%s", file);
-	file = get_next_line(fd);
-	printf("%s", file);
-	file = get_next_line(fd);
-	printf("%s", file);
+	while (counter <= 5)
+	{
+		file = get_next_line(fd);
+		printf("%s", file);
+		counter++;
+	}
 	free(file);
 	close(fd);
 	return (0);
