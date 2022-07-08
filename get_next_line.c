@@ -6,7 +6,7 @@
 /*   By: dgoremyk <dgoremyk@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/06 22:02:23 by dgoremyk          #+#    #+#             */
-/*   Updated: 2022/07/07 16:55:12 by dgoremyk         ###   ########.fr       */
+/*   Updated: 2022/07/08 17:25:01 by dgoremyk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@
 // 	return (newhold);
 // }
 
-char	*reader(int fd, char *hold)
+char	*reader(int fd, char *hold) //MINE CAUSES KO AND LEAKS
 {
 	int		bytes_read;
 	char	*buffer;
@@ -30,7 +30,7 @@ char	*reader(int fd, char *hold)
 	if (!buffer)
 		return (0);
 	bytes_read = 1;
-	while (bytes_read != 0 && (!ft_strchr(hold, '\n')))
+	while (bytes_read != 0 && (!ft_nl(hold)))
 	{
 		bytes_read = read(fd, buffer, BUFFER_SIZE);
 		if (bytes_read == -1)
@@ -48,7 +48,7 @@ char	*reader(int fd, char *hold)
 	return (hold);
 }
 
-char	*cleaner(char *hold)
+char	*cleaner(char *hold) //MINE IS OK
 {
 	char	*line;
 	int	i;
@@ -76,7 +76,7 @@ char	*cleaner(char *hold)
 	return (line);
 }
 
-char	*garbage_collector(char *hold)
+char	*garbage_collector(char *hold) //MINE CAUSE A LOT OF LEAKS ->RRRRRR
 {
 	char	*garbage;
 	int		i;
@@ -92,7 +92,11 @@ char	*garbage_collector(char *hold)
 	}
 	garbage = malloc((ft_strlen(hold) - i + 1) * sizeof(char));
 	if (!garbage)
+	{
+		free(garbage); //?
+		free(hold); //?
 		return (0);
+	}
 	i++;
 	j = 0;
 	while (hold[i])
@@ -106,8 +110,10 @@ char	*get_next_line(int fd)
 {
 	static char	*hold;
 	char		*line;
+	
+	hold = NULL;
 
-	if (BUFFER_SIZE <= 0 || fd < 0)
+	if (fd < 0 || BUFFER_SIZE <= 0 || read(fd, 0, 0) < 0)
 		return (0);
 	hold = reader(fd, hold);
 	if (!hold)
@@ -115,22 +121,4 @@ char	*get_next_line(int fd)
 	line = cleaner(hold);
 	hold = garbage_collector(hold);
 	return(line);
-}
-
-int	main(void)
-{
-	int counter = 0;
-	int		fd;
-	char	*file;
-	
-	fd = open("text.txt", O_RDONLY);
-	while (counter <= 5)
-	{
-		file = get_next_line(fd);
-		printf("%s", file);
-		counter++;
-	}
-	free(file);
-	close(fd);
-	return (0);
 }
