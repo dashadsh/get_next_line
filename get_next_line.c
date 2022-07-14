@@ -6,7 +6,7 @@
 /*   By: dgoremyk <dgoremyk@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/06 22:02:23 by dgoremyk          #+#    #+#             */
-/*   Updated: 2022/07/08 17:25:01 by dgoremyk         ###   ########.fr       */
+/*   Updated: 2022/07/13 19:34:19 by dgoremyk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,10 +39,7 @@ char	*reader(int fd, char *hold) //MINE CAUSES KO AND LEAKS
 			return (0);
 		}
 		buffer[bytes_read] = '\0';
-		if (hold)
 			hold = ft_strjoin(hold, buffer);
-		else
-			hold = ft_strjoin("", buffer);
 	}
 	free(buffer);
 	return (hold);
@@ -60,7 +57,7 @@ char	*cleaner(char *hold) //MINE IS OK
 		i++;
 	line = (char *)malloc(sizeof(char) * (i + 2));
 	if (!line)
-		return (0);
+		return (NULL);
 	i = 0;
 	while (hold[i] && hold[i] != '\n')
 	{
@@ -76,7 +73,7 @@ char	*cleaner(char *hold) //MINE IS OK
 	return (line);
 }
 
-char	*garbage_collector(char *hold) //MINE CAUSE A LOT OF LEAKS ->RRRRRR
+static char	*garbage_collector(char *hold) //MINE CAUSE A LOT OF LEAKS ->RRRRRR
 {
 	char	*garbage;
 	int		i;
@@ -106,18 +103,20 @@ char	*garbage_collector(char *hold) //MINE CAUSE A LOT OF LEAKS ->RRRRRR
 	return (garbage);
 }
 
+
+
 char	*get_next_line(int fd)
 {
 	static char	*hold;
 	char		*line;
 	
-	hold = NULL;
+	// hold = NULL;
 
-	if (fd < 0 || BUFFER_SIZE <= 0 || read(fd, 0, 0) < 0)
+	if (fd < 0 || BUFFER_SIZE <= 0) //|| read(fd, 0, 0) < 0
 		return (0);
 	hold = reader(fd, hold);
 	if (!hold)
-		return(0);
+		return(NULL);
 	line = cleaner(hold);
 	hold = garbage_collector(hold);
 	return(line);

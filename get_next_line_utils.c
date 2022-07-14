@@ -6,7 +6,7 @@
 /*   By: dgoremyk <dgoremyk@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/06 22:02:05 by dgoremyk          #+#    #+#             */
-/*   Updated: 2022/07/08 17:25:27 by dgoremyk         ###   ########.fr       */
+/*   Updated: 2022/07/13 19:34:06 by dgoremyk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,9 +45,12 @@ char	*ft_strjoin(char *s1, char *s2)
 
 	i = 0;
 	j = 0;
-	if (!s1 || !s2)
-		return (NULL);
-	newstring = malloc(ft_strlen(s1) + ft_strlen(s2) + 1);
+	if (s1 == NULL)
+	{
+		s1 = (char *)malloc(sizeof(char) * 1);
+		s1[0] = '\0';
+	}
+	newstring = (char *)malloc(sizeof(char) * ft_strlen(s1) + ft_strlen(s2) + 1);
 	if (!newstring)
 		return (NULL);
 	while (s1[i])
@@ -58,6 +61,7 @@ char	*ft_strjoin(char *s1, char *s2)
 	while (s2[j])
 		newstring[i++] = s2[j++];
 	newstring[i] = '\0';
+	free(s1);
 	return (newstring);
 }
 
@@ -78,6 +82,20 @@ char	*ft_strjoin(char *s1, char *s2)
 // 		return ((char *)s + i);
 // 	return (NULL);
 // }
+
+// char	*ft_strchr(const char *s, int i)
+// {
+// 	while (*s)
+// 	{
+// 		if (*s == i)
+// 			return ((char *)s);
+// 		s++;
+// 	}
+// 	if (i == '\0')
+// 		return ((char *)s);
+// 	return (0);
+// }
+
 
 // char	*ft_substr(char const *s, unsigned int start, size_t len)
 // {
@@ -105,6 +123,30 @@ char	*ft_strjoin(char *s1, char *s2)
 // 	return (ptr);
 // }
 
+// char	*ft_substr(char const *s, unsigned int start, size_t len)
+// {
+// 	size_t	i;
+// 	size_t	j;
+// 	char	*str;
+
+// 	str = (char *)malloc(sizeof(*s) * (len + 1));
+// 	if (str == 0)
+// 		return (NULL);
+// 	i = 0;
+// 	j = 0;
+// 	while (s[i])
+// 	{
+// 		if (i >= start && j < len)
+// 		{
+// 			str[j] = s[i];
+// 			j++;
+// 		}
+// 		i++;
+// 	}
+// 	str[j] = 0;
+// 	return (str);
+// }
+
 // void	*ft_calloc(size_t count, size_t size)
 // {
 // 	char	*ptr;
@@ -122,4 +164,30 @@ char	*ft_strjoin(char *s1, char *s2)
 // 		i++;
 // 	}
 // 	return (ptr);
+// }
+
+// char	*ft_strdup(const char *s1)
+// {
+// 	char	*copy;
+
+// 	copy = malloc(ft_strlen(s1) + 1);
+// 	if (!copy)
+// 		return (NULL);
+// 	ft_memcpy(copy, s1, (ft_strlen(s1) + 1));
+// 	return (copy);
+// }
+
+// void	*ft_memcpy(void *dst, const void *src, size_t n)
+// {
+// 	size_t	i;
+
+// 	i = 0;
+// 	if (!dst && !src)
+// 		return (NULL);
+// 	while (i < n)
+// 	{
+// 		((unsigned char *)dst)[i] = ((unsigned char *)src)[i];
+// 		i++;
+// 	}
+// 	return (dst);
 // }
