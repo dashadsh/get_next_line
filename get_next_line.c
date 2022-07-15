@@ -6,52 +6,43 @@
 /*   By: dgoremyk <dgoremyk@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/06 22:02:23 by dgoremyk          #+#    #+#             */
-/*   Updated: 2022/07/13 19:34:19 by dgoremyk         ###   ########.fr       */
+/*   Updated: 2022/07/14 15:01:54 by dgoremyk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-// char join_feature(char *hold, char *buffer)
-// {
-// 	char	*newhold;
-
-// 	newhold = ft_strjoin(hold, buffer);
-// 	free (hold);
-// 	return (newhold);
-// }
-
-char	*reader(int fd, char *hold) //MINE CAUSES KO AND LEAKS
+char	*reader(int fd, char *hold)
 {
 	int		bytes_read;
 	char	*buffer;
 
 	buffer = (char *)malloc(sizeof(char) * (BUFFER_SIZE + 1));
 	if (!buffer)
-		return (0);
+		return (NULL);
 	bytes_read = 1;
-	while (bytes_read != 0 && (!ft_nl(hold)))
+	while (bytes_read != 0 && (!ft_newline_found(hold)))
 	{
 		bytes_read = read(fd, buffer, BUFFER_SIZE);
 		if (bytes_read == -1)
 		{
 			free(buffer);
-			return (0);
+			return (NULL);
 		}
 		buffer[bytes_read] = '\0';
-			hold = ft_strjoin(hold, buffer);
+		hold = ft_strjoin(hold, buffer);
 	}
 	free(buffer);
 	return (hold);
 }
 
-char	*cleaner(char *hold) //MINE IS OK
+char	*cleaner(char *hold)
 {
 	char	*line;
 	int	i;
 
 	i = 0;
-	if (!hold) ///NEEDED??????
+	if (!hold[i]) // don't free //not a "if (!hold)"
 		return (NULL);
 	while (hold[i] && hold[i] != '\n')
 		i++;
@@ -73,7 +64,7 @@ char	*cleaner(char *hold) //MINE IS OK
 	return (line);
 }
 
-static char	*garbage_collector(char *hold) //MINE CAUSE A LOT OF LEAKS ->RRRRRR
+static char	*garbage_collector(char *hold)
 {
 	char	*garbage;
 	int		i;
@@ -82,24 +73,20 @@ static char	*garbage_collector(char *hold) //MINE CAUSE A LOT OF LEAKS ->RRRRRR
 	i = 0;
 	while (hold[i] && hold[i] != '\n')
 		i++;
-	if (!hold[i]) //NEEDED?????
+	if (!hold[i])
 	{
 		free (hold);
 		return (NULL);
 	}
 	garbage = malloc((ft_strlen(hold) - i + 1) * sizeof(char));
 	if (!garbage)
-	{
-		free(garbage); //?
-		free(hold); //?
-		return (0);
-	}
+		return (NULL);
 	i++;
 	j = 0;
 	while (hold[i])
 		garbage[j++] = hold[i++];
 	garbage[j] = '\0';
-	free(hold); //not for single function, only LATER in program!!!
+	free(hold);
 	return (garbage);
 }
 
@@ -109,15 +96,13 @@ char	*get_next_line(int fd)
 {
 	static char	*hold;
 	char		*line;
-	
-	// hold = NULL;
 
-	if (fd < 0 || BUFFER_SIZE <= 0) //|| read(fd, 0, 0) < 0
-		return (0);
+	if (fd < 0 || BUFFER_SIZE <= 0)
+		return (NULL);
 	hold = reader(fd, hold);
 	if (!hold)
-		return(NULL);
+		return (NULL);
 	line = cleaner(hold);
 	hold = garbage_collector(hold);
-	return(line);
+	return (line);
 }
