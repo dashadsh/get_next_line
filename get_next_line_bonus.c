@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*   get_next_line_bonus.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: dgoremyk <dgoremyk@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/06 22:02:23 by dgoremyk          #+#    #+#             */
-/*   Updated: 2022/07/16 19:47:43 by dgoremyk         ###   ########.fr       */
+/*   Updated: 2022/07/16 19:47:36 by dgoremyk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#include "get_next_line_bonus.h"
 
 char	*reader(int fd, char *hold)
 {
@@ -92,18 +92,18 @@ static char	*garbage_collector(char *hold)
 
 char	*get_next_line(int fd)
 {
-	static char	*hold;
+	static char	*hold[4096];
 	char		*line;
 
 	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
-	hold = reader(fd, hold);
-	if (!hold)
+	hold[fd] = reader(fd, hold[fd]);
+	if (!hold[fd])
 	{
 		//free (hold[fd]);
 		return (NULL);
 	}
-	line = cleaner(hold);
-	hold = garbage_collector(hold);
+	line = cleaner(hold[fd]);
+	hold[fd] = garbage_collector(hold[fd]);
 	return (line);
 }
