@@ -6,7 +6,7 @@
 /*   By: dgoremyk <dgoremyk@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/06 22:02:23 by dgoremyk          #+#    #+#             */
-/*   Updated: 2022/07/16 19:47:43 by dgoremyk         ###   ########.fr       */
+/*   Updated: 2022/07/21 12:27:29 by dgoremyk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,10 +39,10 @@ char	*reader(int fd, char *hold)
 char	*cleaner(char *hold)
 {
 	char	*line;
-	int	i;
+	int		i;
 
 	i = 0;
-	if (!hold[i]) // don't free //not a "if (!hold)"
+	if (!hold[i])
 		return (NULL);
 	while (hold[i] && hold[i] != '\n')
 		i++;
@@ -64,6 +64,7 @@ char	*cleaner(char *hold)
 	return (line);
 }
 
+/* going through hold first, if no \n - return */
 static char	*garbage_collector(char *hold)
 {
 	char	*garbage;
@@ -90,6 +91,7 @@ static char	*garbage_collector(char *hold)
 	return (garbage);
 }
 
+/*not needed to free hold*/
 char	*get_next_line(int fd)
 {
 	static char	*hold;
@@ -99,10 +101,7 @@ char	*get_next_line(int fd)
 		return (NULL);
 	hold = reader(fd, hold);
 	if (!hold)
-	{
-		//free (hold[fd]);
 		return (NULL);
-	}
 	line = cleaner(hold);
 	hold = garbage_collector(hold);
 	return (line);
