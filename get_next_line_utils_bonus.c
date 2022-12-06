@@ -6,7 +6,7 @@
 /*   By: dgoremyk <dgoremyk@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/06 22:02:05 by dgoremyk          #+#    #+#             */
-/*   Updated: 2022/07/16 19:30:16 by dgoremyk         ###   ########.fr       */
+/*   Updated: 2022/12/06 18:37:16 by dgoremyk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,31 +37,29 @@ char	*ft_newline_found(char *s)
 	return (NULL);
 }
 
-char	*ft_strjoin(char *s1, char *s2)
+char	*gnl_strjoin(char *s1, char *s2)
 {
-	char	*newstring;
+	char	*new;
 	int		i;
 	int		j;
 
-	i = 0;
+	i = -1;
 	j = 0;
-	if (s1 == NULL)
+	if (!s1)
 	{
 		s1 = (char *)malloc(sizeof(char) * 1);
 		s1[0] = '\0';
 	}
-	newstring = (char *)malloc(sizeof(char) * ft_strlen(s1)
-			+ ft_strlen(s2) + 1);
-	if (!newstring)
+	if (!s1 || !s2)
 		return (NULL);
-	while (s1[i])
-	{	
-		newstring[i] = s1[i];
-		i++;
-	}
+	new = malloc(sizeof(char) * (ft_strlen(s1) + ft_strlen(s2) + 1));
+	if (!new)
+		return (NULL);
+	while (s1[++i])
+		new[i] = s1[i];
 	while (s2[j])
-		newstring[i++] = s2[j++];
-	newstring[i] = '\0';
+		new[i++] = s2[j++];
+	new[i] = '\0';
 	free(s1);
-	return (newstring);
+	return (new);
 }

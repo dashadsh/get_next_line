@@ -6,7 +6,7 @@
 /*   By: dgoremyk <dgoremyk@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/06 22:02:23 by dgoremyk          #+#    #+#             */
-/*   Updated: 2022/08/25 21:05:28 by dgoremyk         ###   ########.fr       */
+/*   Updated: 2022/08/26 13:05:30 by dgoremyk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ char	*reader(int fd, char *hold)
 	if (!buffer)
 		return (NULL);
 	bytes_read = 1;
-	while (bytes_read != 0 && (!ft_newline_found(hold)))
+	while (bytes_read && (!ft_newline_found(hold)))
 	{
 		bytes_read = read(fd, buffer, BUFFER_SIZE);
 		if (bytes_read == -1)

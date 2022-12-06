@@ -6,7 +6,7 @@
 /*   By: dgoremyk <dgoremyk@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/06 22:02:23 by dgoremyk          #+#    #+#             */
-/*   Updated: 2022/08/25 16:35:12 by dgoremyk         ###   ########.fr       */
+/*   Updated: 2022/08/26 13:06:06 by dgoremyk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ char	*reader(int fd, char *hold)
 	if (!buffer)
 		return (NULL);
 	bytes_read = 1;
-	while (bytes_read != 0 && (!ft_newline_found(hold)))
+	while (bytes_read && (!ft_newline_found(hold)))
 	{
 		bytes_read = read(fd, buffer, BUFFER_SIZE);
 		if (bytes_read == -1)
@@ -89,8 +89,7 @@ char	*cleaner(char *hold)
 	return (line);
 }
 
-/* 
-A Function to Save the Extra Read Characters 
+/* A FUNCTION TO SAVE EXTRA READ CHARS 
 if \n is present (otherwise free/return):
 We must now “reset” the static variable by taking all the 
 characters after the \n:
@@ -100,8 +99,7 @@ minus the number of characters until the \n (included!),
 + 1 for the final \0,
 - malloc a string of that size,
 - copy the characters and add the final \0,
-- return the new malloc’d string.
-*/
+- return the new malloc’d string. */
 char	*garbage_collector(char *hold)
 {
 	char	*garbage;
@@ -128,9 +126,7 @@ char	*garbage_collector(char *hold)
 	return (garbage);
 }
 
-/*
-including check for invalid fd
-*/
+/* including check for invalid fd */
 char	*get_next_line(int fd)
 {
 	static char	*hold;
