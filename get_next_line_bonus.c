@@ -6,7 +6,7 @@
 /*   By: dgoremyk <dgoremyk@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/06 22:02:23 by dgoremyk          #+#    #+#             */
-/*   Updated: 2022/08/26 13:05:30 by dgoremyk         ###   ########.fr       */
+/*   Updated: 2022/12/06 18:41:44 by dgoremyk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ char	*reader(int fd, char *hold)
 	if (!buffer)
 		return (NULL);
 	bytes_read = 1;
-	while (bytes_read && (!ft_newline_found(hold)))
+	while (bytes_read && (!gnl_newline_found(hold)))
 	{
 		bytes_read = read(fd, buffer, BUFFER_SIZE);
 		if (bytes_read == -1)
@@ -30,7 +30,7 @@ char	*reader(int fd, char *hold)
 			return (NULL);
 		}
 		buffer[bytes_read] = '\0';
-		hold = ft_strjoin(hold, buffer);
+		hold = gnl_strjoin(hold, buffer);
 	}
 	free(buffer);
 	return (hold);
@@ -78,7 +78,7 @@ char	*garbage_collector(char *hold)
 		free (hold);
 		return (NULL);
 	}
-	garbage = malloc((ft_strlen(hold) - i + 1) * sizeof(char));
+	garbage = malloc((gnl_strlen(hold) - i + 1) * sizeof(char));
 	if (!garbage)
 		return (NULL);
 	i++;

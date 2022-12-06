@@ -6,7 +6,7 @@
 /*   By: dgoremyk <dgoremyk@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/30 22:44:10 by dgoremyk          #+#    #+#             */
-/*   Updated: 2022/12/06 18:37:10 by dgoremyk         ###   ########.fr       */
+/*   Updated: 2022/12/06 18:43:23 by dgoremyk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,8 +26,8 @@
 #  define BUFFER_SIZE BUFSIZ
 # endif
 
-char		*ft_newline_found(char *s);
-size_t		ft_strlen(const char *s);
+char		*gnl_newline_found(char *s);
+size_t		gnl_strlen(const char *s);
 char		*gnl_strjoin(char *s1, char *s2);
 
 char		*reader(int fd, char *hold);
